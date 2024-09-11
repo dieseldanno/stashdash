@@ -2,7 +2,7 @@
 import { useState } from "react";
 import { useAuth } from "@/context/auth";
 
-export default function EditItemForm({ item, onUpdate }) {
+export default function EditItemForm({ item, onUpdate, onClose }) {
   const { token } = useAuth();
   const [name, setName] = useState(item.name);
   const [description, setDescription] = useState(item.description);
@@ -33,7 +33,8 @@ export default function EditItemForm({ item, onUpdate }) {
 
     if (response.ok) {
       const updatedItem = await response.json();
-      onUpdate(updatedItem); // Call the parent function to update the item in the list
+      onUpdate(updatedItem); // call parent function to update
+      alert("Item was updated!");
     } else {
       const error = await response.json();
       alert(error.message || "Something went wrong, try again");
@@ -41,46 +42,65 @@ export default function EditItemForm({ item, onUpdate }) {
   };
 
   return (
-    <form onSubmit={handleSubmit}>
-      <label>
-        Name:
-        <input
-          className="text-gray-700"
-          type="text"
-          value={name}
-          onChange={(e) => setName(e.target.value)}
-        />
-      </label>
-      <label>
-        Description:
-        <textarea
-          className="text-gray-700"
-          value={description}
-          onChange={(e) => setDescription(e.target.value)}
-        />
-      </label>
-      <label>
-        Quantity:
-        <input
-          className="text-gray-700"
-          type="number"
-          value={quantity}
-          onChange={(e) => setQuantity(e.target.value)}
-          min="0"
-        />
-      </label>
-      <label>
-        Category:
-        <input
-          className="text-gray-700"
-          type="text"
-          value={category}
-          onChange={(e) => setCategory(e.target.value)}
-        />
-      </label>
-      <button className="text-blue-700" type="submit">
-        Update Item
-      </button>
-    </form>
+    <div>
+      <h2 className="text-2xl font-bold mb-4 text-gray-800">Edit Item</h2>
+      <form onSubmit={handleSubmit}>
+        <label className="block mb-2 text-gray-700">
+          Name:
+          <input
+            type="text"
+            value={name}
+            onChange={(e) => setName(e.target.value)}
+            className="w-full p-2 border rounded text-gray-700"
+            required
+          />
+        </label>
+        <label className="block mb-2 text-gray-700">
+          Description:
+          <textarea
+            value={description}
+            onChange={(e) => setDescription(e.target.value)}
+            className="w-full p-2 border rounded text-gray-700"
+            required
+          />
+        </label>
+        <label className="block mb-2 text-gray-700">
+          Quantity:
+          <input
+            type="number"
+            value={quantity}
+            onChange={(e) => setQuantity(Number(e.target.value))}
+            min="0"
+            className="w-full p-2 border rounded text-gray-700"
+            required
+          />
+        </label>
+        <label className="block mb-4 text-gray-700">
+          Category:
+          <input
+            type="text"
+            value={category}
+            onChange={(e) => setCategory(e.target.value)}
+            className="w-full p-2 border rounded text-gray-700"
+            required
+          />
+        </label>
+        <div className="flex justify-between">
+          <button
+            type="submit"
+            className="bg-blue-500 text-white px-4 py-2 rounded"
+          >
+            Update Item
+          </button>
+          <button
+            type="button"
+            onClick={onClose}
+            className="bg-red-500 text-white px-4 py-2 rounded"
+          >
+            Cancel
+          </button>
+        </div>
+      </form>
+    </div>
   );
 }

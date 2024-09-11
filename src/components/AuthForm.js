@@ -7,9 +7,9 @@ function AuthForm() {
   const router = useRouter();
   const auth = useAuth();
 
-  const [email, setEmail] = useState("abc123@mail.com");
-  const [password, setPassword] = useState("abc123");
-  const [name, setName] = useState("");
+  const [email, setEmail] = useState("example@mail.com");
+  const [password, setPassword] = useState("example");
+  const [name, setName] = useState("Super Mario");
   const [error, setError] = useState("");
   const [isLogin, setIsLogin] = useState(true);
 
@@ -43,63 +43,79 @@ function AuthForm() {
     setError(data.message || "Something went wrong, try again"); // get error msg from api response
   }
 
-  //   console.log("Auth", auth);
-
   return (
-    <div>
-      AuthForm
-      <form className="form bg-white" onSubmit={handleSubmit}>
-        <div className="form__group">
-          <label className="form__label text-gray-800">Email</label>
+    <div className="max-w-md mx-auto bg-white p-8 rounded-lg shadow-md">
+      <h2 className="text-2xl font-bold mb-6 text-gray-800">
+        {isLogin ? "Login" : "Register"}
+      </h2>
+      <form className="space-y-6" onSubmit={handleSubmit}>
+        <div>
+          <label className="block text-sm font-medium text-gray-700">
+            Email
+          </label>
           <input
-            className="form__input"
+            className="mt-1 block w-full p-2 text-gray-800 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring focus:border-blue-300"
             type="email"
             value={email}
             onChange={(e) => {
               setEmail(e.target.value);
             }}
-          ></input>
+            required
+          />
         </div>
-        <div className="form__group">
-          <label className="form__label text-gray-800">Password</label>
+
+        <div>
+          <label className="block text-sm font-medium text-gray-700">
+            Password
+          </label>
           <input
-            className="form__input"
+            className="mt-1 block w-full p-2 text-gray-800 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring focus:border-blue-300"
             type="password"
             value={password}
             onChange={(e) => {
               setPassword(e.target.value);
             }}
-          ></input>
+            required
+          />
         </div>
+
         {!isLogin && (
-          <div className="form__group">
-            <label className="form__label text-gray-800">Name</label>
+          <div>
+            <label className="block text-sm font-medium text-gray-700">
+              Name
+            </label>
             <input
-              className="form__input"
+              className="mt-1 block w-full p-2 text-gray-800 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring focus:border-blue-300"
               type="text"
               value={name}
               onChange={(e) => {
                 setName(e.target.value);
               }}
-            ></input>
+              required
+            />
           </div>
         )}
-        {error && <p className="text-red-500">{error}</p>}
-        <button className="form__button form__button--primary">
+
+        {error && <p className="text-red-500 text-sm">{error}</p>}
+
+        <button
+          type="submit"
+          className="w-full bg-blue-600 text-white py-2 px-4 rounded-md hover:bg-blue-700 focus:outline-none focus:ring focus:ring-blue-300"
+        >
           {isLogin ? "Login" : "Register"}
         </button>
-        <p className="form__text">...or</p>
-        <div className="form__group">
-          <button
-            className="form__button form__button--secondary"
-            type="button"
-            onClick={(e) => {
-              setIsLogin(!isLogin);
-            }}
-          >
-            {!isLogin ? "Login" : "Register"}
-          </button>
-        </div>
+
+        <p className="text-center text-gray-500 mt-4">or</p>
+
+        <button
+          type="button"
+          className="w-full bg-gray-600 text-white py-2 px-4 rounded-md hover:bg-gray-700 focus:outline-none focus:ring focus:ring-gray-300"
+          onClick={(e) => {
+            setIsLogin(!isLogin);
+          }}
+        >
+          {isLogin ? "Register" : "Login"}
+        </button>
       </form>
     </div>
   );
