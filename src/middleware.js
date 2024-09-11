@@ -4,8 +4,8 @@ import { verifyJWT } from "./utils/helpers/authHelpers";
 const unsafeMethods = ["POST", "PUT", "DELETE"];
 
 export async function middleware(req) {
-  console.log("Middleware is running", req.url.pathname);
   const url = new URL(req.url);
+  console.log("Middleware is running", url.pathname);
   if (
     unsafeMethods.includes(req.method) ||
     url.pathname.includes("api/users")
@@ -33,12 +33,15 @@ export async function middleware(req) {
       );
     }
   }
+
+  return NextResponse.next();
 }
 
 export const config = {
   matcher: [
     "/api/items/",
     "/api/items/:path*",
+    "/api/users/",
     "/api/users/:path*",
     "/api/users/me",
   ],

@@ -1,6 +1,6 @@
 import * as jose from "jose";
 
-const JWT_SECRET = "SECRET"; // should be a env variable
+const JWT_SECRET = process.env.JWT_SECRET; // secure via env
 
 const JWT_AUTH_EXP = "1y";
 
@@ -19,7 +19,10 @@ export async function signJWT(payload) {
 }
 
 export async function verifyJWT(token) {
-  const verified = await jose.jwtVerify(token, encodedSecret());
-
-  return verified.payload;
+  try {
+    const verified = await jose.jwtVerify(token, encodedSecret());
+    return verified.payload;
+  } catch (error) {
+    return null;
+  }
 }

@@ -1,8 +1,7 @@
 import { NextResponse } from "next/server";
-
 import { signJWT } from "@/utils/helpers/authHelpers";
-
 import { PrismaClient } from "@prisma/client";
+import bcrypt from "bcrypt";
 
 const prisma = new PrismaClient();
 
@@ -12,12 +11,13 @@ export async function POST(req) {
     body = await req.json();
     console.log(body);
     if (!body.email || !body.password) {
-      throw new Error();
+      throw new Error("Email and password has to be provided");
     }
   } catch (error) {
     return NextResponse.json(
       {
-        message: "A valid new user object has to be provided",
+        message:
+          "A valid new user object with email and password has to be provided",
       },
       {
         status: 400,
@@ -32,9 +32,17 @@ export async function POST(req) {
       },
     });
 
-    if (!user || user.password !== body.password) {
-      //TODO: replace with more safe check
-      throw new Error("Invalid login credentials");
+    // compare passwords with bcrypt (secure way)
+    const isPasswordValid = await bcrypt.compare(body.password, user.password);
+    if (!user || !isPasswordValid) {
+      return NextResponse.json(
+        {
+          message: "Invalid login credentials",
+        },
+        {
+          status: 400,
+        }
+      );
     }
 
     const token = await signJWT({
@@ -49,7 +57,7 @@ export async function POST(req) {
     console.log(error);
     return NextResponse.json(
       {
-        error: error.message,
+        error: error.message || "Something went wrong, try again",
       },
       {
         status: 400,

@@ -1,7 +1,5 @@
 "use client";
-
 import { useState } from "react";
-
 import { useRouter } from "next/navigation";
 import { useAuth } from "@/context/auth";
 
@@ -20,6 +18,7 @@ function AuthForm() {
     setError("");
 
     const url = isLogin ? "/api/auth/login" : "/api/auth/register";
+
     const response = await fetch(url, {
       method: "POST",
       headers: {
@@ -28,23 +27,23 @@ function AuthForm() {
       body: JSON.stringify({
         email,
         password,
-        name,
+        name: !name ? "" : name, // include name only if provided
       }),
     });
 
-    if (response.ok) {
-      const data = await response.json();
+    const data = await response.json();
 
-      console.log("data", data);
+    if (response.ok) {
+      // if ok, proceed and redirect
       localStorage.setItem("@library/token", data.token);
       auth.setToken(data.token);
       router.push("/items");
       return;
     }
-    setError("Invalid login credentials");
+    setError(data.message || "Something went wrong, try again"); // get error msg from api response
   }
 
-  console.log("Auth", auth);
+  //   console.log("Auth", auth);
 
   return (
     <div>

@@ -3,7 +3,7 @@ import {
   object404Respsonse,
   validateItemData,
 } from "@/utils/helpers/apiHelpers";
-
+import { verifyJWT } from "@/utils/helpers/authHelpers";
 import { PrismaClient } from "@prisma/client";
 
 const prisma = new PrismaClient();
@@ -28,8 +28,20 @@ export async function GET(req, options) {
 export async function PUT(req, options) {
   const id = options.params.id;
 
-  let body;
+  // get token
+  const token = req.headers.get("authorization")?.split(" ")[1];
 
+  // verify token
+  try {
+    const decoded = await verifyJWT(token);
+    if (!decoded) {
+      return NextResponse.json({ message: "Unauthorized" }, { status: 401 });
+    }
+  } catch (error) {
+    return NextResponse.json({ message: "Unauthorized" }, { status: 401 });
+  }
+
+  let body;
   try {
     body = await req.json();
   } catch (error) {
@@ -84,6 +96,19 @@ export async function PUT(req, options) {
 // delete item
 export async function DELETE(req, options) {
   const id = options.params.id;
+
+  // get token
+  const token = req.headers.get("authorization")?.split(" ")[1];
+
+  // verify token
+  try {
+    const decoded = await verifyJWT(token);
+    if (!decoded) {
+      return NextResponse.json({ message: "Unauthorized" }, { status: 401 });
+    }
+  } catch (error) {
+    return NextResponse.json({ message: "Unauthorized" }, { status: 401 });
+  }
 
   try {
     await prisma.item.delete({

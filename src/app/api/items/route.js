@@ -1,6 +1,5 @@
 import { NextResponse } from "next/server";
 import { validateItemData } from "@/utils/helpers/apiHelpers";
-
 import { PrismaClient } from "@prisma/client";
 
 const prisma = new PrismaClient();
@@ -8,20 +7,39 @@ const prisma = new PrismaClient();
 // get item
 export async function GET(req) {
   const url = new URL(req.url);
-  const search = url.searchParams.get("search");
-  let items = [];
+  const categories = url.searchParams.get("category");
+  const inStock = url.searchParams.get("inStock"); // true or false statement
 
-  if (search) {
+  let filter = {};
+
+  console.log("Categories:", categories);
+  console.log("In Stock:", inStock);
+
+  // filter category
+  if (categories) {
+    const categoriesArray = categories.split(",");
+    filter.category = {
+      in: categoriesArray,
+      mode: "insensitive",
+    };
+  }
+
+  // filter in stock
+  if (inStock !== null) {
+    filter.quantity = inStock === "true" ? { gt: 0 } : 0; // greater than 0 in stock, 0 out of stock
+    console.log("Filter by Stock Status:", filter.quantity);
+  }
+
+  let items;
+  try {
     items = await prisma.item.findMany({
-      where: {
-        title: {
-          contains: search,
-          mode: "insensitive",
-        },
-      },
+      where: filter,
     });
-  } else {
-    items = await prisma.item.findMany();
+  } catch (error) {
+    return NextResponse.json(
+      { message: "Failed to fetch item" },
+      { status: 500 }
+    );
   }
 
   return NextResponse.json(items);
@@ -32,6 +50,7 @@ export async function POST(req) {
   let body;
   try {
     body = await req.json();
+    console.log("Incoming request body:", body); // Add this to log the incoming data
   } catch (error) {
     return NextResponse.json(
       {
@@ -42,9 +61,6 @@ export async function POST(req) {
       }
     );
   }
-
-  //   const userId = req.headers.get("userId");
-  //   console.log("User ", userId, " making the request");
 
   const [hasErrors, errors] = validateItemData(body);
   if (hasErrors) {
