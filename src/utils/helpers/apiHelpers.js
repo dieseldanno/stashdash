@@ -30,17 +30,6 @@ export function object404Respsonse(response, model = "") {
   );
 }
 
-export async function validateJSONData(req) {
-  let body;
-  try {
-    // parse incoming data to json
-    body = await req.json();
-    return [false, body];
-  } catch (error) {
-    return [true, null];
-  }
-}
-
 export async function validateUserData(data) {
   let errors = {};
   if (!data.name) {

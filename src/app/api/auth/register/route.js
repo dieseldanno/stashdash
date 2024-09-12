@@ -53,7 +53,7 @@ export async function POST(req) {
       );
     }
 
-    // Hash password
+    // hash password
     const hashed = await bcrypt.hash(body.password, 10);
 
     const user = await prisma.user.create({
@@ -63,8 +63,6 @@ export async function POST(req) {
         name: body.name,
       },
     });
-
-    console.log("User registered: ", user);
 
     const token = await signJWT({
       userId: user.id,

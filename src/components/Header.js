@@ -22,7 +22,7 @@ function Header({ itemAdded }) {
 
   return (
     <header className="flex items-center justify-between bg-stone-400 p-6">
-      <h1 className="text-3xl font-bold text-black">stashdash</h1>
+      <h1 className="text-3xl font-bold text-black">Stashdash</h1>
       <div className="flex items-center space-x-4">
         {auth.token && (
           <button

@@ -8,8 +8,8 @@ function AuthForm() {
   const auth = useAuth();
 
   const [email, setEmail] = useState("example@mail.com");
-  const [password, setPassword] = useState("example");
-  const [name, setName] = useState("Super Mario");
+  const [password, setPassword] = useState("******");
+  const [name, setName] = useState("Your name here");
   const [error, setError] = useState("");
   const [isLogin, setIsLogin] = useState(true);
 

@@ -20,7 +20,6 @@ export async function GET(req, options) {
     console.log(user);
     return NextResponse.json(user);
   } catch (error) {
-    console.log("user", userId, error);
     return object404Respsonse(NextResponse, "User");
   }
 }

@@ -5,12 +5,10 @@ const unsafeMethods = ["POST", "PUT", "DELETE"];
 
 export async function middleware(req) {
   const url = new URL(req.url);
-  console.log("Middleware is running", url.pathname);
   if (
     unsafeMethods.includes(req.method) ||
     url.pathname.includes("api/users")
   ) {
-    console.log("VERIFY");
     try {
       const bearer = req.headers.get("Authorization") || "";
       const token = bearer.split(" ")?.[1]; // get the token from the Authorization header through optional chaining

@@ -12,9 +12,6 @@ export async function GET(req) {
 
   let filter = {};
 
-  console.log("Categories:", categories);
-  console.log("In Stock:", inStock);
-
   // filter category
   if (categories) {
     const categoriesArray = categories.split(",");
@@ -27,7 +24,6 @@ export async function GET(req) {
   // filter in stock
   if (inStock !== null) {
     filter.quantity = inStock === "true" ? { gt: 0 } : 0; // greater than 0 in stock, 0 out of stock
-    console.log("Filter by Stock Status:", filter.quantity);
   }
 
   let items;
@@ -50,7 +46,6 @@ export async function POST(req) {
   let body;
   try {
     body = await req.json();
-    console.log("Incoming request body:", body); // Add this to log the incoming data
   } catch (error) {
     return NextResponse.json(
       {
@@ -85,7 +80,6 @@ export async function POST(req) {
       },
     });
   } catch (error) {
-    console.log(error.message);
     return NextResponse.json(
       {
         message: "Invalid data sent for item creation",

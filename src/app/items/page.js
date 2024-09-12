@@ -73,7 +73,6 @@ export default function ItemsPage() {
       setItems((prevItems) => prevItems.filter((item) => item.id !== itemId));
       alert("Item was deleted");
     } else {
-      console.error("Failed to delete item");
       alert("Failed to delete item");
     }
   };
@@ -89,13 +88,12 @@ export default function ItemsPage() {
     setItems((prevItems) =>
       prevItems.map((item) => (item.id === updatedItem.id ? updatedItem : item))
     );
-    setIsEditModalOpen(false); // Close the form after update
+    setIsEditModalOpen(false); // close the form after update
   };
 
   return (
     <div>
       <Header itemAdded={handleItemAdded} />
-      {/* <h1 className="text-3xl font-bold text-gray-50 mb-6">Items</h1> */}
 
       <div className="bg-stone-400 p-6 space-y-6 border-t-2 border-stone-600">
         <div>
