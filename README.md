@@ -1,3 +1,5 @@
+Inventory management application, using next.js, react, prisma and tailwind
+
 This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
 
 (Inventory app)
