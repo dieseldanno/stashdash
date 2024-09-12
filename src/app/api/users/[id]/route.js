@@ -17,7 +17,6 @@ export async function GET(req, options) {
         id: Number(userId),
       },
     });
-    console.log(user);
     return NextResponse.json(user);
   } catch (error) {
     return object404Respsonse(NextResponse, "User");

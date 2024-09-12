@@ -29,12 +29,12 @@ export async function PUT(req, options) {
   const id = options.params.id;
 
   // get token
-  const token = req.headers.get("authorization")?.split(" ")[1];
+  const token = req.headers.get("authorization")?.split(" ")[1]; // split from bearer and just get token
 
   // verify token
   try {
-    const decoded = await verifyJWT(token);
-    if (!decoded) {
+    const verifyToken = await verifyJWT(token);
+    if (!verifyToken) {
       return NextResponse.json({ message: "Unauthorized" }, { status: 401 });
     }
   } catch (error) {
@@ -102,8 +102,8 @@ export async function DELETE(req, options) {
 
   // verify token
   try {
-    const decoded = await verifyJWT(token);
-    if (!decoded) {
+    const verifyToken = await verifyJWT(token);
+    if (!verifyToken) {
       return NextResponse.json({ message: "Unauthorized" }, { status: 401 });
     }
   } catch (error) {
